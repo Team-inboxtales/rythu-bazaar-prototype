@@ -11,7 +11,12 @@ import {
   Monitor,
   Smartphone,
   ChevronRight,
-  Sprout
+  Sprout,
+  UserCheck,
+  Calendar,
+  Clock,
+  UserCog,
+  Settings as HRSettingsIcon
 } from "lucide-react"
 import { NavLink, useLocation } from "react-router-dom"
 
@@ -37,6 +42,11 @@ const navigationItems = [
   { title: "QR & Public Info", url: "/public-info", icon: QrCode, category: "public" },
   { title: "Reports & Analytics", url: "/reports", icon: BarChart3, category: "analytics" },
   { title: "Training Hub", url: "/training", icon: GraduationCap, category: "learning" },
+  { title: "HR Dashboard", url: "/hr-dashboard", icon: UserCheck, category: "hr" },
+  { title: "Employee Directory", url: "/employee-directory", icon: Users, category: "hr" },
+  { title: "Leave Management", url: "/leave-management", icon: Calendar, category: "hr" },
+  { title: "Attendance", url: "/attendance-overview", icon: Clock, category: "hr" },
+  { title: "HR Settings", url: "/hr-settings", icon: HRSettingsIcon, category: "hr" },
   { title: "Mobile View", url: "/mobile", icon: Smartphone, category: "special" },
   { title: "Settings", url: "/settings", icon: Settings, category: "system" },
 ]
@@ -47,6 +57,7 @@ const groupCategories = {
   public: "Public Services", 
   analytics: "Analytics",
   learning: "Learning",
+  hr: "Human Resources",
   special: "Special Views",
   system: "System"
 }

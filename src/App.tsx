@@ -13,6 +13,12 @@ import Reports from "./pages/Reports";
 import Training from "./pages/Training";
 import MobileView from "./pages/MobileView";
 import Settings from "./pages/Settings";
+import HRDashboard from "./pages/HRDashboard";
+import EmployeeDirectory from "./pages/EmployeeDirectory";
+import EmployeeProfile from "./pages/EmployeeProfile";
+import LeaveManagement from "./pages/LeaveManagement";
+import AttendanceOverview from "./pages/AttendanceOverview";
+import HRSettings from "./pages/HRSettings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +38,12 @@ const App = () => (
           <Route path="/public-info" element={<PublicInfo />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/training" element={<Training />} />
+          <Route path="/hr-dashboard" element={<HRDashboard />} />
+          <Route path="/employee-directory" element={<EmployeeDirectory />} />
+          <Route path="/employee-profile/:id" element={<EmployeeProfile />} />
+          <Route path="/leave-management" element={<LeaveManagement />} />
+          <Route path="/attendance-overview" element={<AttendanceOverview />} />
+          <Route path="/hr-settings" element={<HRSettings />} />
           <Route path="/mobile" element={<MobileView />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="*" element={<NotFound />} />
