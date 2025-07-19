@@ -16,7 +16,8 @@ import {
   Calendar,
   Clock,
   UserCog,
-  Settings as HRSettingsIcon
+  Settings as HRSettingsIcon,
+  Package
 } from "lucide-react"
 import { NavLink, useLocation } from "react-router-dom"
 
@@ -38,6 +39,7 @@ const navigationItems = [
   { title: "Dashboard", url: "/dashboard", icon: Home, category: "main" },
   { title: "Farmer Portal", url: "/farmer", icon: Wheat, category: "main" },
   { title: "Operations", url: "/operations", icon: ClipboardList, category: "operations" },
+  { title: "Inventory Management", url: "/inventory", icon: Package, category: "operations" },
   { title: "Price Management", url: "/price-display", icon: Monitor, category: "operations" },
   { title: "QR & Public Info", url: "/public-info", icon: QrCode, category: "public" },
   { title: "Reports & Analytics", url: "/reports", icon: BarChart3, category: "analytics" },
