@@ -37,7 +37,8 @@ import { cn } from "@/lib/utils"
 
 const navigationItems = [
   { title: "Dashboard", url: "/dashboard", icon: Home, category: "main" },
-  { title: "Farmer Portal", url: "/farmer", icon: Wheat, category: "main" },
+  { title: "Farmer Portal", url: "/farmer-portal", icon: Wheat, category: "portals" },
+  { title: "Admin Portal", url: "/admin-portal", icon: Settings, category: "portals" },
   { title: "Operations", url: "/operations", icon: ClipboardList, category: "operations" },
   { title: "Inventory Management", url: "/inventory", icon: Package, category: "operations" },
   { title: "Price Management", url: "/price-display", icon: Monitor, category: "operations" },
@@ -50,11 +51,12 @@ const navigationItems = [
   { title: "Attendance", url: "/attendance-overview", icon: Clock, category: "hr" },
   { title: "HR Settings", url: "/hr-settings", icon: HRSettingsIcon, category: "hr" },
   { title: "Mobile View", url: "/mobile", icon: Smartphone, category: "special" },
-  { title: "Settings", url: "/settings", icon: Settings, category: "system" },
+  { title: "System Settings", url: "/settings", icon: Settings, category: "system" },
 ]
 
 const groupCategories = {
   main: "Main Dashboard",
+  portals: "Access Portals",
   operations: "Operations",
   public: "Public Services", 
   analytics: "Analytics",
