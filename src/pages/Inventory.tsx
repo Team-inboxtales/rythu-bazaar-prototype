@@ -1,14 +1,31 @@
-import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Package, Plus, Search, AlertTriangle, TrendingUp, TrendingDown } from "lucide-react";
+import { useState } from "react"
+import { AppLayout } from "@/components/layout/AppLayout"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Badge } from "@/components/ui/badge"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+import { InventoryForm } from "@/components/forms/InventoryForm"
+import { useInventory, InventoryItem } from "@/hooks/useInventory"
+import { useToast } from "@/hooks/use-toast"
+import { Package, Plus, Search, AlertTriangle, TrendingUp, TrendingDown, Edit, Trash2 } from "lucide-react"
 
 const Inventory = () => {
-  const [searchTerm, setSearchTerm] = useState("");
+  const { inventory, addItem, updateItem, deleteItem, getStats } = useInventory()
+  const { toast } = useToast()
+  const [searchTerm, setSearchTerm] = useState("")
+  const [isFormOpen, setIsFormOpen] = useState(false)
+  const [editingItem, setEditingItem] = useState<InventoryItem | undefined>()
+  
+  const stats = getStats()
+  
+  const filteredInventory = inventory.filter(item =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.supplierName?.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   const inventoryItems = [
     { id: 1, name: "Tomatoes", category: "Vegetables", quantity: 150, unit: "kg", status: "In Stock", lastUpdated: "2024-01-15" },
@@ -30,17 +47,44 @@ const Inventory = () => {
     }
   };
 
+  const handleAddItem = (itemData: Omit<InventoryItem, 'id' | 'lastUpdated' | 'status'>) => {
+    addItem(itemData)
+    setIsFormOpen(false)
+    toast({
+      title: "Success",
+      description: "Item added successfully"
+    })
+  }
+
+  const openAddForm = () => {
+    setEditingItem(undefined)
+    setIsFormOpen(true)
+  }
+
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <AppLayout>
+      <div className="p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Inventory Management</h1>
           <p className="text-muted-foreground">Track and manage marketplace inventory</p>
         </div>
-        <Button className="gap-2">
-          <Plus className="h-4 w-4" />
-          Add Item
-        </Button>
+        <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+          <DialogTrigger asChild>
+            <Button className="gap-2" onClick={openAddForm}>
+              <Plus className="h-4 w-4" />
+              Add Item
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-4xl">
+            <InventoryForm
+              item={editingItem}
+              onSubmit={handleAddItem}
+              onCancel={() => setIsFormOpen(false)}
+              isEditing={!!editingItem}
+            />
+          </DialogContent>
+        </Dialog>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -170,8 +214,9 @@ const Inventory = () => {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
-  );
+      </div>
+    </AppLayout>
+  )
 };
 
 export default Inventory;

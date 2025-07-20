@@ -1,9 +1,14 @@
+import { useState } from "react"
 import { AppLayout } from "@/components/layout/AppLayout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+import { EmployeeForm } from "@/components/forms/EmployeeForm"
+import { useEmployees, Employee } from "@/hooks/useEmployees"
+import { useToast } from "@/hooks/use-toast"
 import { 
   Users, 
   Search,
@@ -15,87 +20,71 @@ import {
   MapPin,
   Eye,
   Edit,
-  MoreHorizontal
+  MoreHorizontal,
+  Trash2
 } from "lucide-react"
 import { useNavigate } from "react-router-dom"
 
-const employees = [
-  {
-    id: 1,
-    name: "Ramesh Kumar",
-    role: "Market Manager",
-    department: "Administration",
-    phone: "+91 98765 43210",
-    email: "ramesh@rythubazaar.gov.in",
-    location: "Visakhapatnam",
-    status: "active",
-    joinDate: "2022-03-15",
-    avatar: ""
-  },
-  {
-    id: 2,
-    name: "Priya Sharma",
-    role: "Security Guard",
-    department: "Security",
-    phone: "+91 98765 43211",
-    email: "priya@rythubazaar.gov.in",
-    location: "Visakhapatnam",
-    status: "active",
-    joinDate: "2023-01-10",
-    avatar: ""
-  },
-  {
-    id: 3,
-    name: "Mohan Das",
-    role: "Maintenance Staff",
-    department: "Maintenance",
-    phone: "+91 98765 43212",
-    email: "mohan@rythubazaar.gov.in",
-    location: "Visakhapatnam",
-    status: "on-leave",
-    joinDate: "2022-08-20",
-    avatar: ""
-  },
-  {
-    id: 4,
-    name: "Sunita Devi",
-    role: "Helper",
-    department: "Operations",
-    phone: "+91 98765 43213",
-    email: "sunita@rythubazaar.gov.in",
-    location: "Visakhapatnam",
-    status: "active",
-    joinDate: "2023-06-05",
-    avatar: ""
-  },
-  {
-    id: 5,
-    name: "Ravi Kumar",
-    role: "Operations Supervisor",
-    department: "Operations",
-    phone: "+91 98765 43214",
-    email: "ravi@rythubazaar.gov.in",
-    location: "Visakhapatnam",
-    status: "active",
-    joinDate: "2021-11-12",
-    avatar: ""
-  },
-  {
-    id: 6,
-    name: "Lakshmi Devi",
-    role: "Admin Assistant",
-    department: "Administration",
-    phone: "+91 98765 43215",
-    email: "lakshmi@rythubazaar.gov.in",
-    location: "Visakhapatnam",
-    status: "active",
-    joinDate: "2022-05-30",
-    avatar: ""
-  }
-]
-
 export default function EmployeeDirectory() {
   const navigate = useNavigate()
+  const { employees, addEmployee, updateEmployee, deleteEmployee } = useEmployees()
+  const { toast } = useToast()
+  const [searchTerm, setSearchTerm] = useState("")
+  const [statusFilter, setStatusFilter] = useState("all")
+  const [departmentFilter, setDepartmentFilter] = useState("all")
+  const [isFormOpen, setIsFormOpen] = useState(false)
+  const [editingEmployee, setEditingEmployee] = useState<Employee | undefined>()
+
+  const filteredEmployees = employees.filter(employee => {
+    const matchesSearch = employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         employee.role.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         employee.department.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesStatus = statusFilter === "all" || employee.status === statusFilter
+    const matchesDepartment = departmentFilter === "all" || employee.department.toLowerCase() === departmentFilter
+    
+    return matchesSearch && matchesStatus && matchesDepartment
+  })
+
+  const handleAddEmployee = (employeeData: Omit<Employee, 'id'>) => {
+    addEmployee(employeeData)
+    setIsFormOpen(false)
+    toast({
+      title: "Success",
+      description: "Employee added successfully"
+    })
+  }
+
+  const handleEditEmployee = (employeeData: Omit<Employee, 'id'>) => {
+    if (editingEmployee) {
+      updateEmployee(editingEmployee.id, employeeData)
+      setEditingEmployee(undefined)
+      setIsFormOpen(false)
+      toast({
+        title: "Success",
+        description: "Employee updated successfully"
+      })
+    }
+  }
+
+  const handleDeleteEmployee = (id: number) => {
+    if (confirm("Are you sure you want to delete this employee?")) {
+      deleteEmployee(id)
+      toast({
+        title: "Success",
+        description: "Employee deleted successfully"
+      })
+    }
+  }
+
+  const openEditForm = (employee: Employee) => {
+    setEditingEmployee(employee)
+    setIsFormOpen(true)
+  }
+
+  const openAddForm = () => {
+    setEditingEmployee(undefined)
+    setIsFormOpen(true)
+  }
 
   return (
     <AppLayout>
@@ -113,10 +102,22 @@ export default function EmployeeDirectory() {
               <Grid className="h-4 w-4 mr-2" />
               Grid View
             </Button>
-            <Button variant="success" size="sm">
-              <Users className="h-4 w-4 mr-2" />
-              Add Employee
-            </Button>
+            <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+              <DialogTrigger asChild>
+                <Button variant="success" size="sm" onClick={openAddForm}>
+                  <Users className="h-4 w-4 mr-2" />
+                  Add Employee
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl">
+                <EmployeeForm
+                  employee={editingEmployee}
+                  onSubmit={editingEmployee ? handleEditEmployee : handleAddEmployee}
+                  onCancel={() => setIsFormOpen(false)}
+                  isEditing={!!editingEmployee}
+                />
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
 
@@ -126,9 +127,14 @@ export default function EmployeeDirectory() {
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input placeholder="Search by name, role, or department..." className="pl-10" />
+                <Input 
+                  placeholder="Search by name, role, or department..." 
+                  className="pl-10"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
               </div>
-              <Select defaultValue="all">
+              <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
                 <SelectTrigger className="w-40">
                   <SelectValue placeholder="Department" />
                 </SelectTrigger>
@@ -140,7 +146,7 @@ export default function EmployeeDirectory() {
                   <SelectItem value="operations">Operations</SelectItem>
                 </SelectContent>
               </Select>
-              <Select defaultValue="all">
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger className="w-32">
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
@@ -157,7 +163,7 @@ export default function EmployeeDirectory() {
 
         {/* Employee Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {employees.map((employee) => (
+          {filteredEmployees.map((employee) => (
             <Card key={employee.id} className="shadow-soft hover:shadow-medium transition-shadow">
               <CardContent className="p-6">
                 <div className="flex items-start justify-between mb-4">
@@ -207,11 +213,11 @@ export default function EmployeeDirectory() {
                     <Eye className="h-3 w-3 mr-1" />
                     View Profile
                   </Button>
-                  <Button variant="outline" size="sm">
+                  <Button variant="outline" size="sm" onClick={() => openEditForm(employee)}>
                     <Edit className="h-3 w-3" />
                   </Button>
-                  <Button variant="outline" size="sm">
-                    <MoreHorizontal className="h-3 w-3" />
+                  <Button variant="outline" size="sm" onClick={() => handleDeleteEmployee(employee.id)}>
+                    <Trash2 className="h-3 w-3" />
                   </Button>
                 </div>
               </CardContent>
@@ -227,19 +233,19 @@ export default function EmployeeDirectory() {
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
               <div>
-                <p className="text-2xl font-bold text-primary">6</p>
+                <p className="text-2xl font-bold text-primary">{employees.length}</p>
                 <p className="text-sm text-muted-foreground">Total Employees</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-success">5</p>
+                <p className="text-2xl font-bold text-success">{employees.filter(e => e.status === 'active').length}</p>
                 <p className="text-sm text-muted-foreground">Active</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-warning">1</p>
+                <p className="text-2xl font-bold text-warning">{employees.filter(e => e.status === 'on-leave').length}</p>
                 <p className="text-sm text-muted-foreground">On Leave</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-muted-foreground">4</p>
+                <p className="text-2xl font-bold text-muted-foreground">{[...new Set(employees.map(e => e.department))].length}</p>
                 <p className="text-sm text-muted-foreground">Departments</p>
               </div>
             </div>
