@@ -163,9 +163,6 @@ To make all buttons responsive and complete the CRUD operations:
 - **Form Validation**: All forms include proper validation and error messages
 - **Toast Notifications**: Success/error messages appear for all operations
 
-## Project Development Info
-
-**Project URL**: https://lovable.dev/projects/c67f144d-7018-4fe9-bc24-200e2f33f638
 
 ### Technologies Used
 - Vite
@@ -174,9 +171,5 @@ To make all buttons responsive and complete the CRUD operations:
 - shadcn-ui
 - Tailwind CSS
 
-### Deployment
-Simply open [Lovable](https://lovable.dev/projects/c67f144d-7018-4fe9-bc24-200e2f33f638) and click on Share → Publish.
-
----
 
 *This is a functional prototype with working CRUD operations for employee and inventory management. Other features show the intended interface and are ready for implementation.*
