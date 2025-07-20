@@ -1,6 +1,3 @@
-import { BarcodeScanner } from '@capacitor-community/barcode-scanner'
-import { Capacitor } from '@capacitor/core'
-
 export interface ScanResult {
   text: string
   format: string
@@ -8,81 +5,33 @@ export interface ScanResult {
 
 export class QRScannerService {
   static async requestPermissions(): Promise<boolean> {
-    try {
-      if (!Capacitor.isNativePlatform()) {
-        console.log('Not running on native platform, skipping permissions')
-        return false
-      }
-
-      const status = await BarcodeScanner.checkPermission({ force: true })
-      
-      if (status.granted) {
-        return true
-      }
-
-      if (status.denied) {
-        // Permission was denied, show instructions to user
-        alert('Camera permission is required to scan QR codes. Please enable it in your device settings.')
-        return false
-      }
-
-      return false
-    } catch (error) {
-      console.error('Error requesting camera permissions:', error)
-      return false
-    }
+    // Web-only implementation - always return true for mock functionality
+    console.log('Web platform detected, using mock QR scanner')
+    return true
   }
 
   static async startScan(): Promise<ScanResult | null> {
     try {
-      if (!Capacitor.isNativePlatform()) {
-        // For web testing, return mock data
-        return {
-          text: 'FEEDBACK_QR_12345_STALL_23_FARMER_RAMESH',
-          format: 'QR_CODE'
-        }
-      }
-
-      const hasPermission = await this.requestPermissions()
-      if (!hasPermission) {
-        return null
-      }
-
-      // Hide background to show camera
-      document.body.classList.add('scanner-active')
-      await BarcodeScanner.hideBackground()
-
-      const result = await BarcodeScanner.startScan()
+      // Web-only mock implementation
+      console.log('Starting mock QR scan...')
       
-      // Show background again
-      document.body.classList.remove('scanner-active')
-      await BarcodeScanner.showBackground()
-
-      if (result.hasContent) {
-        return {
-          text: result.content,
-          format: result.format || 'QR_CODE'
-        }
+      // Simulate scanning delay
+      await new Promise(resolve => setTimeout(resolve, 1000))
+      
+      // Return mock QR data for testing
+      return {
+        text: 'FEEDBACK_QR_12345_STALL_23_FARMER_RAMESH',
+        format: 'QR_CODE'
       }
-
-      return null
     } catch (error) {
-      console.error('Error during QR scan:', error)
-      // Ensure background is shown again on error
-      document.body.classList.remove('scanner-active')
-      await BarcodeScanner.showBackground()
+      console.error('Error during mock QR scan:', error)
       return null
     }
   }
 
   static async stopScan(): Promise<void> {
-    try {
-      document.body.classList.remove('scanner-active')
-      await BarcodeScanner.stopScan()
-      await BarcodeScanner.showBackground()
-    } catch (error) {
-      console.error('Error stopping scan:', error)
-    }
+    // Web-only implementation - no action needed
+    console.log('Mock QR scan stopped')
   }
 
   static parseFeedbackQR(qrContent: string): {
