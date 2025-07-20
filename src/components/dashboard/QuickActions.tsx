@@ -5,7 +5,7 @@ import { Users, Wheat, MapPin, Smartphone } from "lucide-react"
 
 export function QuickActions() {
   return (
-    <CardClassName="shadow-soft">
+    <Card className="shadow-soft">
       <CardHeader>
         <CardTitle>Quick Actions</CardTitle>
       </CardHeader>
