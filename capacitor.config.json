@@ -1,9 +1,9 @@
 {
-  "appId": "app.lovable.c67f144d70184fe9bc24200e2f33f638",
+  "appId": "app.rythu-bazaar-prototype.c67f144d70184fe9bc24200e2f33f638",
   "appName": "rythu-bazaar-vision",
   "webDir": "dist",
   "server": {
-    "url": "https://c67f144d-7018-4fe9-bc24-200e2f33f638.lovableproject.com?forceHideBadge=true",
+    "url": "https://rythu-bazaar-prototype.netlify.app",
     "cleartext": true
   },
   "plugins": {
