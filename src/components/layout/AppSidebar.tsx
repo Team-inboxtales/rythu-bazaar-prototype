@@ -38,6 +38,7 @@ import { cn } from "@/lib/utils"
 const navigationItems = [
   { title: "Dashboard", url: "/dashboard", icon: Home, category: "main" },
   { title: "Farmer Portal", url: "/farmer-portal", icon: Wheat, category: "portals" },
+  { title: "Farmer Dashboard", url: "/farmer-dashboard", icon: Wheat, category: "portals" },
   { title: "Admin Portal", url: "/admin-portal", icon: Settings, category: "portals" },
   { title: "Operations", url: "/operations", icon: ClipboardList, category: "operations" },
   { title: "Inventory Management", url: "/inventory", icon: Package, category: "operations" },
