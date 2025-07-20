@@ -20,7 +20,7 @@ export function InventoryManager({ inventory }: InventoryManagerProps) {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "good": return "default"
-      case "low": return "warning"
+      case "low": return "secondary"
       case "out": return "destructive"
       default: return "secondary"
     }
@@ -59,7 +59,7 @@ export function InventoryManager({ inventory }: InventoryManagerProps) {
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  {item.status === "low" && <AlertTriangle className="h-4 w-4 text-warning" />}
+                  {item.status === "low" && <AlertTriangle className="h-4 w-4 text-orange-500" />}
                   <Badge variant={getStatusColor(item.status)}>
                     {getStatusText(item.status)}
                   </Badge>
@@ -78,7 +78,7 @@ export function InventoryManager({ inventory }: InventoryManagerProps) {
             <p className="text-muted-foreground mb-4">
               Start tracking your produce by adding inventory items
             </p>
-            <Button variant="accent">
+            <Button variant="default">
               <Plus className="h-4 w-4 mr-2" />
               Add First Item
             </Button>
