@@ -1,0 +1,19 @@
+{
+  "appId": "app.lovable.c67f144d70184fe9bc24200e2f33f638",
+  "appName": "rythu-bazaar-vision",
+  "webDir": "dist",
+  "server": {
+    "url": "https://c67f144d-7018-4fe9-bc24-200e2f33f638.lovableproject.com?forceHideBadge=true",
+    "cleartext": true
+  },
+  "plugins": {
+    "CapacitorBarcodeScanner": {
+      "androidIsBeepEnabled": true,
+      "androidSoundUrl": "",
+      "androidIsVibrationEnabled": true,
+      "iosIsBeepEnabled": true,
+      "iosSoundUrl": "",
+      "iosIsVibrationEnabled": true
+    }
+  }
+}
