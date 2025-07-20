@@ -69,7 +69,7 @@ const initialInventory: InventoryItem[] = [
 export function useInventory() {
   const [inventory, setInventory] = useLocalStorage<InventoryItem[]>('inventory', initialInventory)
 
-  const addItem = (itemData: Omit<InventoryItem, 'id' | 'lastUpdated'>) => {
+  const addItem = (itemData: Omit<InventoryItem, 'id' | 'lastUpdated' | 'status'>) => {
     const newItem = {
       ...itemData,
       id: Math.max(...inventory.map(i => i.id), 0) + 1,
